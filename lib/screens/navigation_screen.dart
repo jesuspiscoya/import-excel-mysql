@@ -19,10 +19,13 @@ class _NavigationScreenState extends State<NavigationScreen> {
         animation: animation,
         child: child,
       ),
-      appBar: const NavigationAppBar(
-        leading: Center(child: FlutterLogo(size: 25)),
-        title: Text(
-          "Flutter Desktop",
+      appBar: NavigationAppBar(
+        leading: Padding(
+          padding: const EdgeInsets.only(left: 17),
+          child: Image.asset('assets/laive-logo.png', height: 40),
+        ),
+        title: const Text(
+          'Importar datos',
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
         ),
       ),

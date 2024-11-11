@@ -20,11 +20,12 @@ class _ConfigurationsScreenState extends State<ConfigurationsScreen> {
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController databaseController = TextEditingController();
+  final TextEditingController tableController = TextEditingController();
   final ConectionController conectionController = ConectionController();
   final SharedPreferencesAsync prefs = SharedPreferencesAsync();
   bool isLoaded = false;
 
-  void testConnection(BuildContext context) async {
+  void test(BuildContext context) async {
     setState(() => isLoaded = true);
 
     if (formConectionKey.currentState!.validate()) {
@@ -38,53 +39,11 @@ class _ConfigurationsScreenState extends State<ConfigurationsScreen> {
       final String result = await conectionController.tryConected(conection);
       setState(() => isLoaded = false);
 
-      showDialog<String>(
-        context: context,
-        builder: (context) => ContentDialog(
-          content: Text(result),
-          actions: [
-            FilledButton(
-              child: const Text('Aceptar'),
-              onPressed: () => Navigator.pop(context),
-            ),
-          ],
-        ),
-      );
-    }
-  }
-
-  void saveConnection(BuildContext context) async {
-    setState(() => isLoaded = true);
-
-    if (formConectionKey.currentState!.validate()) {
-      final conection = Conection(
-        host: hostController.text,
-        port: int.parse(portController.text),
-        user: usernameController.text,
-        password: passwordController.text,
-        db: databaseController.text,
-      );
-      final bool result = await conectionController.saveConnection(conection);
-      setState(() => isLoaded = false);
-
-      if (result) {
+      if (context.mounted) {
         showDialog<String>(
           context: context,
           builder: (context) => ContentDialog(
-            content: const Text('Conexión guardada con éxito.'),
-            actions: [
-              FilledButton(
-                child: const Text('Aceptar'),
-                onPressed: () => Navigator.pop(context),
-              ),
-            ],
-          ),
-        );
-      } else {
-        showDialog<String>(
-          context: context,
-          builder: (context) => ContentDialog(
-            content: const Text('Error al guardar la conexión.'),
+            content: Text(result),
             actions: [
               FilledButton(
                 child: const Text('Aceptar'),
@@ -97,9 +56,43 @@ class _ConfigurationsScreenState extends State<ConfigurationsScreen> {
     }
   }
 
+  void save(BuildContext context) async {
+    setState(() => isLoaded = true);
+
+    if (formConectionKey.currentState!.validate()) {
+      final conection = Conection(
+        host: hostController.text,
+        port: int.parse(portController.text),
+        user: usernameController.text,
+        password: passwordController.text,
+        db: databaseController.text,
+        table: tableController.text,
+      );
+      final String result = await conectionController.saveConnection(conection);
+
+      if (context.mounted) {
+        showDialog<String>(
+          context: context,
+          builder: (context) => ContentDialog(
+            content: Text(result),
+            actions: [
+              FilledButton(
+                child: const Text('Aceptar'),
+                onPressed: () => Navigator.pop(context),
+              ),
+            ],
+          ),
+        );
+
+        setState(() => isLoaded = false);
+      }
+    }
+  }
+
   Future<void> loadConnection() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final String? conection = prefs.getString('conection');
+
     if (conection != null) {
       final Map<String, dynamic> conectionMap = jsonDecode(conection);
       hostController.text = conectionMap['host'];
@@ -107,6 +100,7 @@ class _ConfigurationsScreenState extends State<ConfigurationsScreen> {
       usernameController.text = conectionMap['user'];
       passwordController.text = conectionMap['password'];
       databaseController.text = conectionMap['db'];
+      tableController.text = conectionMap['table'];
     }
   }
 
@@ -124,6 +118,7 @@ class _ConfigurationsScreenState extends State<ConfigurationsScreen> {
     usernameController.dispose();
     passwordController.dispose();
     databaseController.dispose();
+    tableController.dispose();
   }
 
   @override
@@ -184,6 +179,12 @@ class _ConfigurationsScreenState extends State<ConfigurationsScreen> {
                     placeholder: 'database',
                     controller: databaseController,
                   ),
+                  const SizedBox(width: 20),
+                  InputForm(
+                    title: 'Tabla',
+                    placeholder: 'tabla',
+                    controller: tableController,
+                  ),
                 ],
               ),
               isLoaded
@@ -209,7 +210,7 @@ class _ConfigurationsScreenState extends State<ConfigurationsScreen> {
                             TextStyle(fontWeight: FontWeight.w600, height: 1.1),
                       ),
                     ),
-                    onPressed: () => testConnection(context),
+                    onPressed: () => test(context),
                   ),
                   const SizedBox(width: 20),
                   FilledButton(
@@ -222,7 +223,7 @@ class _ConfigurationsScreenState extends State<ConfigurationsScreen> {
                             TextStyle(fontWeight: FontWeight.w600, height: 1.1),
                       ),
                     ),
-                    onPressed: () => saveConnection(context),
+                    onPressed: () => save(context),
                   ),
                 ],
               )

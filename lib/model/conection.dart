@@ -6,6 +6,7 @@ class Conection {
   final String user;
   final String password;
   final String? db;
+  final String? table;
 
   Conection({
     required this.host,
@@ -13,6 +14,7 @@ class Conection {
     required this.user,
     required this.password,
     this.db,
+    this.table,
   });
 
   ConnectionSettings getConnectionSettings() {
@@ -32,6 +34,7 @@ class Conection {
       'user': user,
       'password': password,
       'db': db,
+      'table': table,
     };
   }
 
@@ -42,6 +45,7 @@ class Conection {
       user: map['user'],
       password: map['password'],
       db: map['db'],
+      table: map['table'],
     );
   }
 }

@@ -30,10 +30,11 @@ class _InputFormState extends State<InputForm> {
             ? TextFormBox(
                 placeholder: widget.placeholder,
                 controller: widget.controller,
-                validator: (value) =>
-                    widget.title != 'Database' && value!.isEmpty
-                        ? 'El ${widget.title} es requerido.'
-                        : null,
+                validator: (value) => value!.isEmpty &&
+                        widget.title != 'Database' &&
+                        widget.title != 'Tabla'
+                    ? 'El ${widget.title} es requerido.'
+                    : null,
               )
             : PasswordBox(
                 placeholder: widget.placeholder,

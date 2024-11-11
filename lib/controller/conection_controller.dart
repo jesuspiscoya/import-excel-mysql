@@ -33,21 +33,27 @@ class ConectionController {
     }
   }
 
-  Future<bool> saveConnection(Conection conection) async {
+  Future<String> saveConnection(Conection conection) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
 
     try {
       final conn = await getConnection(conection);
       conn.close();
 
+      if (conection.db == "") {
+        throw Exception("No se ha ingresado la base de datos.");
+      }
+      if (conection.table == "") {
+        throw Exception("No se ha ingresado la tabla.");
+      }
+
       await prefs.setString("conection", jsonEncode(conection.toMap()));
 
-      return true;
+      return "Conexión guardada con éxito.";
     } on MySqlException catch (e) {
-      if (kDebugMode) {
-        print("Error al conectar: ${e.message}");
-      }
-      return false;
+      return "Error al conectar: ${e.message}";
+    } on Exception catch (e) {
+      return e.toString();
     }
   }
 }
