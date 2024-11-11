@@ -89,13 +89,13 @@ BEGIN
     BEGIN
         BLOCK "040904e4"
         BEGIN
-            VALUE "CompanyName", "com.example" "\0"
-            VALUE "FileDescription", "excel_import_db" "\0"
+            VALUE "CompanyName", "Jesus Piscoya" "\0"
+            VALUE "FileDescription", "Desarrollado por Jesus Piscoya Bances." "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "excel_import_db" "\0"
-            VALUE "LegalCopyright", "Copyright (C) 2024 com.example. All rights reserved." "\0"
-            VALUE "OriginalFilename", "excel_import_db.exe" "\0"
-            VALUE "ProductName", "excel_import_db" "\0"
+            VALUE "InternalName", "App Excel Import" "\0"
+            VALUE "LegalCopyright", "Copyright (C) 2024 Jesus Piscoya. All rights reserved." "\0"
+            VALUE "OriginalFilename", "Import Excel.exe" "\0"
+            VALUE "ProductName", "App Excel Import" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END
